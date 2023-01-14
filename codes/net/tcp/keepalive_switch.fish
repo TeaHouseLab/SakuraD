@@ -1,0 +1,3 @@
+function keepalive_switch
+
+end

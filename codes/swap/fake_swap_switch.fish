@@ -1,0 +1,3 @@
+function fake_swap_switch
+
+end
