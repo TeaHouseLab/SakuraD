@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/usr/bin/lotus
 
 function logger-warn
 set_color magenta
@@ -52,6 +52,12 @@ echo '(./)app'
 end
 
 
+function congestion_control_switch
+
+end
+function keepalive_switch
+
+end
 function sysinfo
     #Decide initd type
     set -xg sys_initd (ps -p 1 -o comm=)
@@ -88,25 +94,68 @@ function sysinfo
     end
 end
 
+function loadconf
+
+end
 function loadinfo
     # dynamic loadavg info
     # 0 = spare
-    # 1 = 
-    # 3 = 
-    # 4 =
+    # 1 = intensive
+    # 3 = medium
+    # 4 = busy
 
     #calc loadavg
     set -xg load_avg (math "$(cat /proc/loadavg | string split -f1 ' ')/$sys_cpu_threads*100")
+    #status
+    if test $load_avg -ge 75
+        set -xg load_stat 4
+    else
+        if test $load_avg -ge 50
+            set -xg load_stat 3
+        else
+            if test $load_avg -ge 25
+                set -xg load_stat 2
+            else
+                set -xg load_stat 1
+            end
+        end
+    end
     #Print or not
-    if test "$argv[1]" = "print"
-        env | string match -e 'load_'
+    if test "$argv[1]" = print
+        env | string match -e load_
     end
 end
 
-function zram_init
+function fake_swap_switch
+
+end
+function swapfile_switch
+
+end
+function zram_switch
+
+end
+function dynamic_control_cache
+
+end
+function dynamic_control_swap
+
+end
+function dynamic_control_switch
 
 end
 function broker
+    logger 0 'Daemon loading'
+    echo $fish_pid >/tmp/SakuraD.lock
+    loadconf
+    if $sys_zram_module
+        if $sys_zram_enable
+        else
+            zram_switch
+        end
+    else
+        logger 4 'Zram module is not available in this system'
+    end
 
 end
 set -x prefix [Sakura]

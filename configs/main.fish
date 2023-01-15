@@ -1,4 +1,5 @@
 set -x prefix [Sakura]
+set -x script_location (status filename)
 sysinfo
 switch $argv[1]
     case ign

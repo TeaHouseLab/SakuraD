@@ -10,5 +10,5 @@ function broker
     else
         logger 4 'Zram module is not available in this system'
     end
-
+    
 end
